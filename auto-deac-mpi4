@@ -1,0 +1,17 @@
+#!/bin/bash -l
+#SBATCH --partition=medium
+#SBATCH --tasks-per-node=32
+#SBATCH --time=00:20:00
+#SBATCH --account=classes
+#SBATCH --mail-user=$USER@wfu.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --nodes=4
+#SBATCH -J prtcls4
+#SBATCH -o prtcls4.%j.out
+#SBATCH -e prtcls4.%j.err
+
+# set up environment
+module load rhel7/openmpi/4.0.2-gcc-4.8
+
+# run simulation for 128 MPI processes (32 per node)
+mpirun -n 128 ./mpi -n 2000 -no -s summary-mpi.txt

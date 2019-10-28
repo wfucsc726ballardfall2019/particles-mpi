@@ -1,0 +1,22 @@
+#!/bin/bash -l
+#SBATCH --partition=small
+#SBATCH --tasks-per-node=32
+#SBATCH --time=00:20:00
+#SBATCH --account=classes
+#SBATCH --mail-user=$USER@wfu.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --nodes=1
+#SBATCH -J prtcls1
+#SBATCH -o prtcls1.%j.out
+#SBATCH -e prtcls1.%j.err
+
+# set up environment
+module load rhel7/openmpi/4.0.2-gcc-4.8
+
+# run simulation for up to 32 MPI processes (one per core)
+./serial -n 2000 -no -s summary-mpi.txt
+mpirun -n 2 ./mpi -n 2000 -no -s summary-mpi.txt
+mpirun -n 4 ./mpi -n 2000 -no -s summary-mpi.txt
+mpirun -n 8 ./mpi -n 2000 -no -s summary-mpi.txt
+mpirun -n 16 ./mpi -n 2000 -no -s summary-mpi.txt
+mpirun -n 32 ./mpi -n 2000 -no -s summary-mpi.txt
